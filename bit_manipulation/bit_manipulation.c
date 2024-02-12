@@ -1,7 +1,8 @@
+//below are bitwise operations, printing, swapping and reversing bits of a single char
 #include <unistd.h>
 
 unsigned char	reverse_bits(unsigned char octet);
-void    print_bits(unsigned char octet);
+void            print_bits(unsigned char octet);
 unsigned char   swap_bits(unsigned char octet);
 
 int     main(void)
@@ -19,7 +20,7 @@ int     main(void)
 
 void    print_bits(unsigned char octet)
 {
-        int     bit_len;
+        int             bit_len;
         unsigned char   bit;
 
         bit_len = 7;
