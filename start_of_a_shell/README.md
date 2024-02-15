@@ -7,3 +7,4 @@
 
 What doesnt work?
 - `./shell /bin/echo "Hello, World"` (ft_split messes up the argument I think)
+- proper parsing getting implemented here: https://github.com/tiziaco/minishell/tree/parsing
