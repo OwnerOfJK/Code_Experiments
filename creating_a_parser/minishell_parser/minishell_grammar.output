@@ -1,0 +1,297 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: command_list END_TOKEN
+
+    2 command_list: command
+    3             | redirection_commands
+    4             | pipe_command
+
+    5 pipe_command: simple_command PIPE_TOKEN simple_command
+    6             | redirection_commands PIPE_TOKEN simple_command
+    7             | simple_command PIPE_TOKEN redirection_commands
+
+    8 redirection_commands: command REDIRECTION_INPUT_TOKEN command
+    9                     | command REDIRECTION_OUTPUT_TOKEN command
+   10                     | command REDIRECTION_HEREDOC_TOKEN command
+   11                     | command REDIRECTION_APPEND_TOKEN command
+
+   12 command: simple_command
+
+   13 simple_command: WORD_TOKEN
+   14               | WORD_TOKEN simple_command
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    WORD_TOKEN (258) 13 14
+    PIPE_TOKEN (259) 5 6 7
+    REDIRECTION_INPUT_TOKEN (260) 8
+    REDIRECTION_OUTPUT_TOKEN (261) 9
+    REDIRECTION_HEREDOC_TOKEN (262) 10
+    REDIRECTION_APPEND_TOKEN (263) 11
+    END_TOKEN (264) 1
+
+
+Nonterminals, with rules where they appear
+
+    $accept (10)
+        on left: 0
+    program (11)
+        on left: 1
+        on right: 0
+    command_list (12)
+        on left: 2 3 4
+        on right: 1
+    pipe_command (13)
+        on left: 5 6 7
+        on right: 4
+    redirection_commands (14)
+        on left: 8 9 10 11
+        on right: 3 6 7
+    command (15)
+        on left: 12
+        on right: 2 8 9 10 11
+    simple_command (16)
+        on left: 13 14
+        on right: 5 6 7 12 14
+
+
+State 0
+
+    0 $accept: • program $end
+
+    WORD_TOKEN  shift, and go to state 1
+
+    program               go to state 2
+    command_list          go to state 3
+    pipe_command          go to state 4
+    redirection_commands  go to state 5
+    command               go to state 6
+    simple_command        go to state 7
+
+
+State 1
+
+   13 simple_command: WORD_TOKEN •
+   14               | WORD_TOKEN • simple_command
+
+    WORD_TOKEN  shift, and go to state 1
+
+    $default  reduce using rule 13 (simple_command)
+
+    simple_command  go to state 8
+
+
+State 2
+
+    0 $accept: program • $end
+
+    $end  shift, and go to state 9
+
+
+State 3
+
+    1 program: command_list • END_TOKEN
+
+    END_TOKEN  shift, and go to state 10
+
+
+State 4
+
+    4 command_list: pipe_command •
+
+    $default  reduce using rule 4 (command_list)
+
+
+State 5
+
+    3 command_list: redirection_commands •
+    6 pipe_command: redirection_commands • PIPE_TOKEN simple_command
+
+    PIPE_TOKEN  shift, and go to state 11
+
+    $default  reduce using rule 3 (command_list)
+
+
+State 6
+
+    2 command_list: command •
+    8 redirection_commands: command • REDIRECTION_INPUT_TOKEN command
+    9                     | command • REDIRECTION_OUTPUT_TOKEN command
+   10                     | command • REDIRECTION_HEREDOC_TOKEN command
+   11                     | command • REDIRECTION_APPEND_TOKEN command
+
+    REDIRECTION_INPUT_TOKEN    shift, and go to state 12
+    REDIRECTION_OUTPUT_TOKEN   shift, and go to state 13
+    REDIRECTION_HEREDOC_TOKEN  shift, and go to state 14
+    REDIRECTION_APPEND_TOKEN   shift, and go to state 15
+
+    $default  reduce using rule 2 (command_list)
+
+
+State 7
+
+    5 pipe_command: simple_command • PIPE_TOKEN simple_command
+    7             | simple_command • PIPE_TOKEN redirection_commands
+   12 command: simple_command •
+
+    PIPE_TOKEN  shift, and go to state 16
+
+    $default  reduce using rule 12 (command)
+
+
+State 8
+
+   14 simple_command: WORD_TOKEN simple_command •
+
+    $default  reduce using rule 14 (simple_command)
+
+
+State 9
+
+    0 $accept: program $end •
+
+    $default  accept
+
+
+State 10
+
+    1 program: command_list END_TOKEN •
+
+    $default  reduce using rule 1 (program)
+
+
+State 11
+
+    6 pipe_command: redirection_commands PIPE_TOKEN • simple_command
+
+    WORD_TOKEN  shift, and go to state 1
+
+    simple_command  go to state 17
+
+
+State 12
+
+    8 redirection_commands: command REDIRECTION_INPUT_TOKEN • command
+
+    WORD_TOKEN  shift, and go to state 1
+
+    command         go to state 18
+    simple_command  go to state 19
+
+
+State 13
+
+    9 redirection_commands: command REDIRECTION_OUTPUT_TOKEN • command
+
+    WORD_TOKEN  shift, and go to state 1
+
+    command         go to state 20
+    simple_command  go to state 19
+
+
+State 14
+
+   10 redirection_commands: command REDIRECTION_HEREDOC_TOKEN • command
+
+    WORD_TOKEN  shift, and go to state 1
+
+    command         go to state 21
+    simple_command  go to state 19
+
+
+State 15
+
+   11 redirection_commands: command REDIRECTION_APPEND_TOKEN • command
+
+    WORD_TOKEN  shift, and go to state 1
+
+    command         go to state 22
+    simple_command  go to state 19
+
+
+State 16
+
+    5 pipe_command: simple_command PIPE_TOKEN • simple_command
+    7             | simple_command PIPE_TOKEN • redirection_commands
+
+    WORD_TOKEN  shift, and go to state 1
+
+    redirection_commands  go to state 23
+    command               go to state 24
+    simple_command        go to state 25
+
+
+State 17
+
+    6 pipe_command: redirection_commands PIPE_TOKEN simple_command •
+
+    $default  reduce using rule 6 (pipe_command)
+
+
+State 18
+
+    8 redirection_commands: command REDIRECTION_INPUT_TOKEN command •
+
+    $default  reduce using rule 8 (redirection_commands)
+
+
+State 19
+
+   12 command: simple_command •
+
+    $default  reduce using rule 12 (command)
+
+
+State 20
+
+    9 redirection_commands: command REDIRECTION_OUTPUT_TOKEN command •
+
+    $default  reduce using rule 9 (redirection_commands)
+
+
+State 21
+
+   10 redirection_commands: command REDIRECTION_HEREDOC_TOKEN command •
+
+    $default  reduce using rule 10 (redirection_commands)
+
+
+State 22
+
+   11 redirection_commands: command REDIRECTION_APPEND_TOKEN command •
+
+    $default  reduce using rule 11 (redirection_commands)
+
+
+State 23
+
+    7 pipe_command: simple_command PIPE_TOKEN redirection_commands •
+
+    $default  reduce using rule 7 (pipe_command)
+
+
+State 24
+
+    8 redirection_commands: command • REDIRECTION_INPUT_TOKEN command
+    9                     | command • REDIRECTION_OUTPUT_TOKEN command
+   10                     | command • REDIRECTION_HEREDOC_TOKEN command
+   11                     | command • REDIRECTION_APPEND_TOKEN command
+
+    REDIRECTION_INPUT_TOKEN    shift, and go to state 12
+    REDIRECTION_OUTPUT_TOKEN   shift, and go to state 13
+    REDIRECTION_HEREDOC_TOKEN  shift, and go to state 14
+    REDIRECTION_APPEND_TOKEN   shift, and go to state 15
+
+
+State 25
+
+    5 pipe_command: simple_command PIPE_TOKEN simple_command •
+   12 command: simple_command •
+
+    END_TOKEN  reduce using rule 5 (pipe_command)
+    $default   reduce using rule 12 (command)
